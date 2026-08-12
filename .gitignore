@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+.env.*
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Python tools
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Machine Learning
+*.h5
+*.keras
+*.pt
+*.pth
+*.onnx
+
+# Model weights
+backend/weights/
+models/
+
+# Dataset
+dataset/raw/
+dataset/processed/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+frontend/dist/
+
+# Build
+dist/
+build/
