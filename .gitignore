@@ -53,3 +53,11 @@ frontend/dist/
 # Build
 dist/
 build/
+
+
+# SignaVision datasets
+dataset/training/
+dataset/processed/
+
+# Generated ML visualizations
+augmentation_preview.png
