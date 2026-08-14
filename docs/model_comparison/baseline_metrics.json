@@ -1,0 +1,12 @@
+{
+    "test_accuracy": 0.6019540229885058,
+    "weighted_precision": 0.6320200234573725,
+    "weighted_recall": 0.6019540229885058,
+    "weighted_f1_score": 0.5875431207242204,
+    "test_samples": 8700,
+    "number_of_classes": 29,
+    "loss": 1.1440287828445435,
+    "keras_accuracy": 0.6019540429115295,
+    "top_3_accuracy": 0.8427585959434509,
+    "parameter_count": 31453
+}
