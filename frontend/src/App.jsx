@@ -1,122 +1,196 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+
+import Header from "./components/Header";
+import ImageUploader from "./components/ImageUploader";
+import PredictionResult from "./components/PredictionResult";
+import TopPredictions from "./components/TopPredictions";
+
+import { predictSign } from "./services/api";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedFile, setSelectedFile] =
+    useState(null);
+
+  const [result, setResult] =
+    useState(null);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+
+  const handleFileSelect = (file) => {
+    setSelectedFile(file);
+    setResult(null);
+    setError("");
+  };
+
+
+  const handlePredict = async () => {
+    if (!selectedFile) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setResult(null);
+
+      const prediction =
+        await predictSign(
+          selectedFile
+        );
+
+      setResult(prediction);
+
+    } catch (err) {
+
+      console.error(err);
+
+      setError(
+        err.response?.data?.detail ||
+        "Unable to connect to the SignaVision API."
+      );
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <div className="app">
+
+      <Header />
+
+      <main className="container py-5">
+
+        <div className="text-center mb-5">
+
+          <span className="badge bg-primary-subtle text-primary mb-3">
+            Artificial Neural Networks Project
+          </span>
+
+          <h1 className="display-5 fw-bold">
+            American Sign Language
+            <br />
+            Recognition
+          </h1>
+
+          <p className="lead text-secondary mx-auto hero-description">
+            Upload an ASL alphabet sign and let
+            our custom convolutional neural
+            network recognise it.
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+
+        {error && (
+          <div className="alert alert-danger mb-4">
+            <i className="bi bi-exclamation-triangle me-2"></i>
+            {error}
+          </div>
+        )}
+
+
+        <div className="row g-4">
+
+          <div className="col-lg-6">
+
+            <ImageUploader
+              selectedFile={selectedFile}
+              onFileSelect={handleFileSelect}
+              onPredict={handlePredict}
+              disabled={loading}
+            />
+
+          </div>
+
+
+          <div className="col-lg-6">
+
+            <PredictionResult
+              result={result}
+            />
+
+          </div>
+
+        </div>
+
+
+        <div className="row">
+
+          <div className="col-lg-6 offset-lg-6">
+
+            <TopPredictions
+              predictions={result?.top_3}
+            />
+
+          </div>
+
+        </div>
+
+
+        <section className="stats-section mt-5">
+
+          <div className="row g-3">
+
+            <div className="col-md-3">
+              <div className="stat-card">
+                <div className="stat-value">
+                  29
+                </div>
+                <div className="stat-label">
+                  Classes
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-3">
+              <div className="stat-card">
+                <div className="stat-value">
+                  99.72%
+                </div>
+                <div className="stat-label">
+                  Test Accuracy
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-3">
+              <div className="stat-card">
+                <div className="stat-value">
+                  100%
+                </div>
+                <div className="stat-label">
+                  External Test
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-3">
+              <div className="stat-card">
+                <div className="stat-value">
+                  CNN
+                </div>
+                <div className="stat-label">
+                  Architecture
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+  );
 }
 
-export default App
+export default App;
