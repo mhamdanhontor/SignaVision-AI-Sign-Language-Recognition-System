@@ -16,19 +16,18 @@ def load_dataset(
     shuffle=True,
 ):
     """
-    Load images from a directory structure such as:
+    Load an image dataset from a directory.
 
-    directory/
-        A/
-        B/
-        C/
-        ...
-        Z/
-        del/
-        nothing/
-        space/
+    Expected structure:
 
-    Returns a TensorFlow Dataset.
+        directory/
+            A/
+            B/
+            ...
+            Z/
+            del/
+            nothing/
+            space/
     """
 
     dataset = tf.keras.utils.image_dataset_from_directory(
@@ -48,10 +47,12 @@ def load_dataset(
 
 def prepare_dataset(dataset):
     """
-    Optimize the TensorFlow input pipeline.
-    """
+    Optimize the input pipeline.
 
-    dataset = dataset.cache()
+    We intentionally do NOT use cache() because the
+    dataset is large and caching the complete dataset
+    in RAM would consume a lot of memory.
+    """
 
     dataset = dataset.prefetch(
         buffer_size=tf.data.AUTOTUNE
