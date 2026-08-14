@@ -1,0 +1,11 @@
+{
+    "test_accuracy": 0.9972413793103448,
+    "weighted_precision": 0.9972819593170636,
+    "weighted_recall": 0.9972413793103448,
+    "weighted_f1_score": 0.9972433157220966,
+    "test_samples": 8700,
+    "number_of_classes": 29,
+    "accuracy": 0.9972413778305054,
+    "loss": 0.009763886220753193,
+    "top_3_accuracy": 0.999885082244873
+}
