@@ -83,3 +83,16 @@ Word Formation
         │
         ▼
 React Dashboard
+
+## 🤖 Trained Model
+
+The trained SignaVision CNN is hosted on Hugging Face:
+
+[View / Download the SignaVision CNN](https://huggingface.co/hamdanzameer/signavision-cnn)
+
+### Performance
+
+- Test Accuracy: **99.72%**
+- F1 Score: **99.72%**
+- Top-3 Accuracy: **99.99%**
+- External Accuracy: **100%**
