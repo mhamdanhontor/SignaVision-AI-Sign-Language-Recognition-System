@@ -6,7 +6,11 @@ import PredictionResult from "./components/PredictionResult";
 import TopPredictions from "./components/TopPredictions";
 
 import { predictSign } from "./services/api";
+import WebcamRecognizer from "./components/WebcamRecognizer";
+import WordBuilder from "./components/WordBuilder";
 
+import RecognitionStats from "./components/RecognitionStats";
+import RecognitionHistory from "./components/RecognitionHistory";
 
 function App() {
   const [selectedFile, setSelectedFile] =
@@ -59,6 +63,100 @@ function App() {
       setLoading(false);
     }
   };
+
+  const [stableSign, setStableSign] =
+  useState(null);
+
+const handleStablePrediction = ({
+  sign,
+  confidence,
+}) => {
+
+  setStableSign(
+    sign
+  );
+
+
+  if (
+    sign === "nothing"
+  ) {
+    return;
+  }
+
+
+  if (
+    sign === "space"
+  ) {
+    return;
+  }
+
+
+  if (
+    sign === "del"
+  ) {
+    return;
+  }
+
+
+  setCurrentConfidence(
+    confidence
+  );
+
+
+  setTotalSigns(
+    (previous) =>
+      previous + 1
+  );
+
+
+  setHistory(
+    (previous) => {
+
+      const entry = {
+
+        id:
+          Date.now() +
+          Math.random(),
+
+        sign,
+
+        confidence,
+
+        time:
+          new Date()
+            .toLocaleTimeString(),
+
+      };
+
+
+      return [
+        entry,
+        ...previous,
+      ].slice(0, 20);
+
+    }
+  );
+
+};
+
+const [history, setHistory] =
+  useState([]);
+
+const [totalSigns, setTotalSigns] =
+  useState(0);
+const [text, setText] =
+  useState("");
+
+const wordCount =
+  text.trim()
+    ? text.trim().split(/\s+/).length
+    : 0;
+
+const [
+  currentConfidence,
+  setCurrentConfidence,
+] = useState(null);
+
 
 
   return (
@@ -186,6 +284,96 @@ function App() {
           </div>
 
         </section>
+
+        <section className="mt-5">
+
+  <div className="text-center mb-4">
+
+    <h2 className="fw-bold">
+      Real-Time ASL Recognition
+    </h2>
+
+    <p className="text-secondary">
+      Use your webcam to recognise signs
+      instantly.
+    </p>
+
+  </div>
+
+  <div className="row">
+
+    <div className="col-lg-8 mx-auto">
+
+     <WebcamRecognizer
+  onStablePrediction={
+    handleStablePrediction
+  }
+/>
+
+<div className="mt-4">
+
+  <WordBuilder
+    stableSign={stableSign}
+    text={text}
+    setText={setText}
+  />
+
+</div>
+<section className="mt-5">
+
+  <div className="mb-4">
+
+    <h2 className="fw-bold">
+      Recognition Dashboard
+    </h2>
+
+    <p className="text-secondary">
+      Real-time statistics from your
+      SignaVision session.
+    </p>
+
+  </div>
+
+
+<RecognitionStats
+  currentSign={stableSign}
+  confidence={currentConfidence}
+  totalSigns={totalSigns}
+  totalWords={wordCount}
+/>
+
+  <section className="mt-4">
+
+  <RecognitionHistory
+    history={history}
+    onClear={() =>
+      setHistory([])
+    }
+  />
+
+</section>
+
+</section>
+
+{stableSign && (
+  <div className="alert alert-primary mt-3 text-center">
+
+    <span className="text-secondary">
+      Current stable sign:
+    </span>
+
+    <strong className="ms-2 fs-4">
+      {stableSign}
+    </strong>
+
+  </div>
+)}
+
+    </div>
+
+  </div>
+
+</section>
 
       </main>
 

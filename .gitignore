@@ -68,3 +68,57 @@ models/
 
 models/
 *.keras
+
+.env
+.env.*
+!.env.example
+
+
+---------------------------------------------------
+
+
+---
+
+# 17.15 Update `.gitignore`
+
+Make sure you **do NOT upload** your dataset.
+
+Your `.gitignore` should contain:
+
+```gitignore
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dataset
+dataset/raw/
+dataset/training/
+dataset/processed/
+dataset/test/
+dataset/train/
+dataset/validation/
+
+# Node
+node_modules/
+client/node_modules/
+frontend/node_modules/
+
+# Build
+client/dist/
+frontend/dist/
+
+# Python cache
+.pytest_cache/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
